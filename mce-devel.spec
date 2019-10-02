@@ -39,7 +39,12 @@ Entity).
 %setup -q -n mce-dev-%{version}
 
 %build
-%{__make} mce.pc %{?with_apidocs:doc}
+# make mce.pc relies on dpkg utilities, do it manually
+%{__sed} -e 's/@VERSION@/%{version}/' <mce.pc.in >mce.pc
+
+%if %{with apidocs}
+%{__make} doc
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
